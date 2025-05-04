@@ -59,7 +59,7 @@ async function initializeDatabase() {
                     acteurs: "Jean Reno, Gary Oldman, Natalie Portman",
                     realisateurs: "Luc Besson",
                     available_copies: 2,
-                    imgPath: "https://m.media-amazon.com/images/M/MV5BODg3MGNhYjItZGU2Yi00MzU0LThlYWUtYjQyYjVhZWEwYjVlXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg",
+                    imgPath: "https://upload.wikimedia.org/wikipedia/en/0/03/Leon-poster.jpg",
                     trailer: "https://www.youtube.com/embed/rNw0D7Hh0DY"
                 },
                 {
@@ -83,7 +83,7 @@ async function initializeDatabase() {
                     acteurs: "Arnold Schwarzenegger, Jamie Lee Curtis, Tom Arnold",
                     realisateurs: "James Cameron",
                     available_copies: 2,
-                    imgPath: "https://m.media-amazon.com/images/M/MV5BMTYwYjYwYjUtYjQwZi00YjQwLTg2YjUtYjQwYjQwYjQwYjQwXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg",
+                    imgPath: "https://upload.wikimedia.org/wikipedia/en/7/7a/True_Lies_poster.jpg",
                     trailer: "https://www.youtube.com/embed/3B8ocfB8jj4"
                 },
                 {
@@ -95,7 +95,7 @@ async function initializeDatabase() {
                     acteurs: "Judith Hoag, Elias Koteas, Josh Pais",
                     realisateurs: "Steve Barron",
                     available_copies: 3,
-                    imgPath: "https://m.media-amazon.com/images/M/MV5BMjA0N2QwYjUtYjQwZi00YjQwLTg2YjUtYjQwYjQwYjQwYjQwXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg",
+                    imgPath: "https://upload.wikimedia.org/wikipedia/en/8/8c/Teenage_Mutant_Ninja_Turtles_%281990_film%29_poster.jpg",
                     trailer: "https://www.youtube.com/embed/FMJPwGoAfAk"
                 },
                 {
@@ -107,7 +107,7 @@ async function initializeDatabase() {
                     acteurs: "Vin Diesel, Paul Walker, Michelle Rodriguez",
                     realisateurs: "Justin Lin",
                     available_copies: 4,
-                    imgPath: "https://m.media-amazon.com/images/M/MV5BMTkzYjQwYjUtYjQwZi00YjQwLTg2YjUtYjQwYjQwYjQwYjQwXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg",
+                    imgPath: "https://upload.wikimedia.org/wikipedia/en/8/8f/Fast_and_Furious_Poster.jpg",
                     trailer: "https://www.youtube.com/embed/2TAOizOnNPo"
                 },
                 {
@@ -119,7 +119,7 @@ async function initializeDatabase() {
                     acteurs: "Dustin Hoffman, Robin Williams, Julia Roberts",
                     realisateurs: "Steven Spielberg",
                     available_copies: 2,
-                    imgPath: "https://m.media-amazon.com/images/M/MV5BMTYwYjYwYjUtYjQwZi00YjQwLTg2YjUtYjQwYjQwYjQwYjQwXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg",
+                    imgPath: "https://upload.wikimedia.org/wikipedia/en/5/5a/Hook_film_poster.jpg",
                     trailer: "https://www.youtube.com/embed/YoHD9XEInc0"
                 },
                 {
@@ -131,7 +131,7 @@ async function initializeDatabase() {
                     acteurs: "Whoopi Goldberg, Maggie Smith, Harvey Keitel",
                     realisateurs: "Emile Ardolino",
                     available_copies: 3,
-                    imgPath: "https://m.media-amazon.com/images/M/MV5BMjA0N2QwYjUtYjQwZi00YjQwLTg2YjUtYjQwYjQwYjQwYjQwXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg",
+                    imgPath: "https://upload.wikimedia.org/wikipedia/en/1/1b/Sister_Act_poster.jpg",
                     trailer: "https://www.youtube.com/embed/V6N6U7YVFyA"
                 }
             ];
