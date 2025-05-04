@@ -6,10 +6,15 @@ async function initializeDatabase() {
     try {
         // Read and execute schema (chaque requête séparément)
         const schema = fs.readFileSync(path.join(__dirname, '../../schema.sql'), 'utf8');
-        const statements = schema
+        // Supprimer toutes les lignes de commentaires
+        const cleanedSchema = schema
+            .split('\n')
+            .filter(line => !line.trim().startsWith('--'))
+            .join('\n');
+        const statements = cleanedSchema
             .split(';')
             .map(s => s.trim())
-            .filter(s => s.length && !s.startsWith('--'));
+            .filter(s => s.length);
         for (const stmt of statements) {
             await db.run(stmt);
         }
