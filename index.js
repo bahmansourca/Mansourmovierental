@@ -8,6 +8,9 @@ const rentalRoutes = require('./src/routes/rentalRoutes');
 const userRoutes = require('./src/routes/userRoutes');
 const ratingRoutes = require('./src/routes/ratingRoutes');
 
+// Initialisation de la base de données
+require('./src/db/init.js');
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 
