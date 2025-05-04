@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const db = require('../db/database');
+const db = require('../db/pgDatabase');
 
 module.exports = async (req, res, next) => {
     try {
@@ -13,8 +13,9 @@ module.exports = async (req, res, next) => {
         // Verify token
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         
-        // Get user from database
-        const user = await db.get('SELECT * FROM users WHERE id = ?', [decoded.id]);
+        // Get user from PostgreSQL
+        const { rows } = await db.query('SELECT * FROM users WHERE id = $1', [decoded.id]);
+        const user = rows[0];
         
         if (!user) {
             console.error('User not found in database:', decoded.id);
