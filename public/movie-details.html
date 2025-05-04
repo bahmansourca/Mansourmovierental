@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Details - Movie Rental</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .movie-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 500px;
+            margin: 20px auto;
+        }
+
+        .movie-header img {
+            width: 200px;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .movie-info {
+            width: 100%;
+            color: white;
+            text-align: center;
+        }
+
+        .movie-info h1 {
+            color: #ff4500;
+            margin-bottom: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .movie-info p {
+            margin-bottom: 10px;
+            font-size: 15px;
+            line-height: 1.6;
+            color: #e0e0e0;
+        }
+
+        .movie-info strong {
+            color: #ff6b6b;
+            font-size: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .movie-rating {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px auto;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .movie-rating h3 {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .star-rating {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .star {
+            font-size: 32px;
+            color: #ccc;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: none;
+        }
+
+        .star:hover {
+            transform: scale(1.2);
+            color: #ffd700;
+        }
+
+        .star.active {
+            color: #ffd700;
+            transform: scale(1.1);
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+        }
+
+        .rating-message {
+            color: #4caf50;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 10px;
+            text-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+        }
+
+        .average-rating {
+            color: #ffd700;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+        }
+
+        .rating-count {
+            color: #e0e0e0;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .btn {
+            width: 100%;
+            max-width: 200px;
+            margin: 10px auto;
+            display: block;
+            background: linear-gradient(45deg, #ff6b6b, #ff4500);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, #ff4500, #ff6b6b);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, #2c3e50, #34495e);
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(45deg, #34495e, #2c3e50);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            position: relative;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 1000px;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .movie-trailer {
+            max-width: 500px;
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        .movie-trailer h2 {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">Movie Rental</div>
+        <div class="nav-links">
+            <a href="movies.html">Movies</a>
+            <a href="my-movies.html">My Movies</a>
+            <a href="profile.html">Profile</a>
+            <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div id="movieDetails" class="movie-details">
+            <!-- Movie details will be loaded here -->
+        </div>
+    </div>
+
+    <div class="movie-trailer">
+        <h2>Trailer</h2>
+        <button id="trailerBtn" class="btn btn-secondary">Watch Trailer</button>
+    </div>
+    <!-- Trailer Modal -->
+    <div id="trailerModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span id="closeTrailer" class="close">&times;</span>
+            <iframe id="trailerFrame" width="560" height="315" src="" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <script>
+        // Check authentication
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = 'login.html';
+        });
+
+        // Get movie ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const movieId = urlParams.get('id');
+
+        // Load movie details
+        async function loadMovieDetails() {
+            try {
+                const response = await fetch(`/api/movies/${movieId}`);
+                const movie = await response.json();
+                window.currentMovie = movie;
+
+                const movieDetails = document.getElementById('movieDetails');
+                movieDetails.innerHTML = `
+                    <div class="movie-header">
+                        <img src="${movie.imgPath}" alt="${movie.title}">
+                        <div class="movie-info">
+                            <h1>${movie.title}</h1>
+                            <p><strong>Year:</strong> ${movie.annee_sortie}</p>
+                            <p><strong>Genre:</strong> ${movie.genre}</p>
+                            <p><strong>Language:</strong> ${movie.langue_originale}</p>
+                            <p><strong>Country:</strong> ${movie.pays_productions}</p>
+                            <p><strong>Director:</strong> ${movie.realisateurs}</p>
+                            <p><strong>Cast:</strong> ${movie.acteurs}</p>
+                            <p><strong>Available Copies:</strong> ${movie.available_copies}</p>
+                            <button id="rentBtn" class="btn btn-primary" ${movie.available_copies <= 0 ? 'disabled' : ''}>
+                                ${movie.available_copies <= 0 ? 'Not Available' : 'Rent Movie'}
+                            </button>
+                        </div>
+                    </div>
+                    <div class="movie-trailer">
+                        <h2>Trailer</h2>
+                        <button id="trailerBtn" class="btn btn-secondary">Watch Trailer</button>
+                    </div>
+                    <div class="movie-rating">
+                        <h3>Rate this movie</h3>
+                        <div id="starRating" class="star-rating">
+                            <span data-value="1" class="star">&#9733;</span>
+                            <span data-value="2" class="star">&#9733;</span>
+                            <span data-value="3" class="star">&#9733;</span>
+                            <span data-value="4" class="star">&#9733;</span>
+                            <span data-value="5" class="star">&#9733;</span>
+                        </div>
+                        <div id="ratingMessage" style="margin-top:8px;color:#4caf50;"></div>
+                        <div id="averageRating" class="average-rating"></div>
+                        <div id="ratingCount" class="rating-count"></div>
+                    </div>
+                `;
+
+                // Add rent functionality
+                if (movie.available_copies > 0) {
+                    document.getElementById('rentBtn').addEventListener('click', rentMovie);
+                }
+
+                // Initialize star rating after loading movie details
+                initializeStarRating();
+            } catch (error) {
+                console.error('Error loading movie details:', error);
+            }
+        }
+
+        // Rent movie
+        async function rentMovie() {
+            try {
+                const response = await fetch(`/api/rentals/rent/${movieId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert('Movie rented successfully!');
+                    window.location.href = 'my-movies.html';
+                } else {
+                    alert(data.error || 'Failed to rent movie');
+                }
+            } catch (error) {
+                console.error('Error renting movie:', error);
+                alert('An error occurred while renting the movie');
+            }
+        }
+
+        // Star rating initialization
+        function initializeStarRating() {
+            const starRating = document.getElementById('starRating');
+            if (!starRating) return;
+            
+            let selectedRating = 0;
+            const stars = starRating.querySelectorAll('.star');
+            const ratingMessage = document.getElementById('ratingMessage');
+            const averageRating = document.getElementById('averageRating');
+            const ratingCount = document.getElementById('ratingCount');
+
+            // Load user's rating if exists
+            async function loadUserRating() {
+                try {
+                    const userId = JSON.parse(localStorage.getItem('user')).id;
+                    const response = await fetch(`/api/ratings/${movieId}/user/${userId}`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    const data = await response.json();
+                    if (data.rating) {
+                        selectedRating = data.rating;
+                        highlightStars(selectedRating);
+                        // Save rating in localStorage
+                        localStorage.setItem(`movie_${movieId}_rating`, selectedRating);
+                    }
+                } catch (error) {
+                    console.error('Error loading user rating:', error);
+                    // Try to get rating from localStorage
+                    const savedRating = localStorage.getItem(`movie_${movieId}_rating`);
+                    if (savedRating) {
+                        selectedRating = parseInt(savedRating);
+                        highlightStars(selectedRating);
+                    }
+                }
+            }
+
+            // Load average rating
+            async function loadAverageRating() {
+                try {
+                    const response = await fetch(`/api/ratings/${movieId}/average`);
+                    const data = await response.json();
+                    if (averageRating) {
+                        averageRating.textContent = `Average rating: ${data.averageRating ? data.averageRating.toFixed(1) : '0'}/5`;
+                    }
+                    if (ratingCount) {
+                        ratingCount.textContent = `(${data.count || 0} votes)`;
+                    }
+                } catch (error) {
+                    console.error('Error loading average rating:', error);
+                }
+            }
+
+            function highlightStars(rating) {
+                stars.forEach(star => {
+                    const value = parseInt(star.getAttribute('data-value'));
+                    if (value <= rating) {
+                        star.classList.add('active');
+                        star.style.color = '#ffd700';
+                    } else {
+                        star.classList.remove('active');
+                        star.style.color = '#ccc';
+                    }
+                });
+            }
+
+            async function submitRating(rating) {
+                try {
+                    const token = localStorage.getItem('token');
+                    if (!token) {
+                        ratingMessage.textContent = 'Please log in to rate this movie';
+                        ratingMessage.style.color = '#ff6b6b';
+                        return;
+                    }
+
+                    const user = JSON.parse(localStorage.getItem('user'));
+                    if (!user || !user.id) {
+                        ratingMessage.textContent = 'Error: User not found';
+                        ratingMessage.style.color = '#ff6b6b';
+                        return;
+                    }
+
+                    const response = await fetch(`/api/ratings/${movieId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ 
+                            rating,
+                            userId: user.id 
+                        })
+                    });
+
+                    if (response.status === 401) {
+                        // Token invalid or expired
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('user');
+                        window.location.href = 'login.html';
+                        return;
+                    }
+
+                    const data = await response.json();
+                    if (response.ok) {
+                        selectedRating = rating;
+                        highlightStars(rating);
+                        localStorage.setItem(`movie_${movieId}_rating`, rating);
+                        ratingMessage.textContent = 'Thank you for your rating!';
+                        ratingMessage.style.color = '#4caf50';
+                        setTimeout(() => {
+                            ratingMessage.textContent = '';
+                        }, 3000);
+                        loadAverageRating();
+                    } else {
+                        ratingMessage.textContent = data.error || 'Error sending rating';
+                        ratingMessage.style.color = '#ff6b6b';
+                    }
+                } catch (error) {
+                    console.error('Error submitting rating:', error);
+                    ratingMessage.textContent = 'Server error while sending rating';
+                    ratingMessage.style.color = '#ff6b6b';
+                }
+            }
+
+            // Add event listeners to stars
+            stars.forEach(star => {
+                star.addEventListener('mouseover', function() {
+                    const rating = parseInt(this.getAttribute('data-value'));
+                    highlightStars(rating);
+                });
+
+                star.addEventListener('mouseout', function() {
+                    highlightStars(selectedRating);
+                });
+
+                star.addEventListener('click', async function() {
+                    const rating = parseInt(this.getAttribute('data-value'));
+                    selectedRating = rating;
+                    highlightStars(rating);
+                    await submitRating(rating);
+                });
+            });
+
+            // Initial load
+            loadUserRating();
+            loadAverageRating();
+        }
+
+        // Initial load
+        loadMovieDetails();
+
+        // Gestion du bouton bande-annonce
+        let trailerUrl = '';
+        document.addEventListener('click', function(e) {
+            if (e.target && e.target.id === 'trailerBtn') {
+                const movie = window.currentMovie;
+                if (movie && movie.trailer) {
+                    trailerUrl = movie.trailer;
+                    document.getElementById('trailerFrame').src = trailerUrl;
+                    document.getElementById('trailerModal').style.display = 'block';
+                }
+            }
+            if (e.target && e.target.id === 'closeTrailer') {
+                document.getElementById('trailerModal').style.display = 'none';
+                document.getElementById('trailerFrame').src = '';
+            }
+        });
+
+        // Store current movie for trailer
+        window.currentMovie = null;
+
+        document.body.classList.add('movie-details-bg');
+    </script>
+</body>
+</html> 

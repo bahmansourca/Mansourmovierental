@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Films - Location de Films</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/images/cinema-bg-5.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: white;
+        }
+
+        .header {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #e50914;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #e50914;
+        }
+
+        .search-container {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .search-input {
+            width: 100%;
+            max-width: 500px;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1em;
+        }
+
+        .search-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: #e50914;
+        }
+
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .movie-card {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .movie-card:hover {
+            transform: scale(1.05);
+        }
+
+        .movie-poster {
+            width: 100%;
+            height: 375px;
+            object-fit: cover;
+        }
+
+        .movie-info {
+            padding: 15px;
+        }
+
+        .movie-title {
+            font-size: 1.2em;
+            margin: 0 0 10px 0;
+        }
+
+        .movie-details {
+            font-size: 0.9em;
+            color: #aaa;
+            margin: 0 0 10px 0;
+        }
+
+        .rent-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #e50914;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .rent-btn:hover {
+            background-color: #f40612;
+        }
+
+        .rent-btn:disabled {
+            background-color: #666;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            color: #e50914;
+            text-align: center;
+            margin: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">Location de Films</div>
+        <nav class="nav-links">
+            <a href="/movies">Films</a>
+            <a href="/my-rentals">Mes Locations</a>
+            <a href="#" id="logout">Déconnexion</a>
+        </nav>
+    </header>
+
+    <div class="search-container">
+        <input type="text" class="search-input" placeholder="Rechercher un film...">
+    </div>
+
+    <div class="filters">
+        <button class="filter-btn active" data-filter="all">Tous</button>
+        <button class="filter-btn" data-filter="available">Disponibles</button>
+        <button class="filter-btn" data-filter="action">Action</button>
+        <button class="filter-btn" data-filter="comedy">Comédie</button>
+        <button class="filter-btn" data-filter="drama">Drame</button>
+    </div>
+
+    <div class="error-message" id="errorMessage"></div>
+
+    <div class="movies-grid" id="moviesGrid">
+        <!-- Les films seront chargés ici dynamiquement -->
+    </div>
+
+    <script>
+        // Vérification de l'authentification
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = '/login';
+        }
+
+        // Gestion de la déconnexion
+        document.getElementById('logout').addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('token');
+            window.location.href = '/login';
+        });
+
+        // Chargement des films
+        async function loadMovies() {
+            try {
+                const response = await fetch('/api/movies', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erreur lors du chargement des films');
+                }
+
+                const movies = await response.json();
+                displayMovies(movies);
+            } catch (error) {
+                showError('Erreur lors du chargement des films');
+            }
+        }
+
+        // Affichage des films
+        function displayMovies(movies) {
+            const grid = document.getElementById('moviesGrid');
+            grid.innerHTML = '';
+
+            movies.forEach(movie => {
+                const card = document.createElement('div');
+                card.className = 'movie-card';
+                card.innerHTML = `
+                    <img src="${movie.imageUrl}" alt="${movie.title}" class="movie-poster">
+                    <div class="movie-info">
+                        <h3 class="movie-title">${movie.title}</h3>
+                        <p class="movie-details">${movie.genre} • ${movie.duration} min</p>
+                        <button class="rent-btn" ${movie.available ? '' : 'disabled'}>
+                            ${movie.available ? 'Louer' : 'Indisponible'}
+                        </button>
+                    </div>
+                `;
+
+                // Gestion du clic sur le bouton de location
+                const rentBtn = card.querySelector('.rent-btn');
+                if (movie.available) {
+                    rentBtn.addEventListener('click', () => rentMovie(movie._id));
+                }
+
+                grid.appendChild(card);
+            });
+        }
+
+        // Location d'un film
+        async function rentMovie(movieId) {
+            try {
+                const response = await fetch('/api/rentals/rent', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ movieId })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erreur lors de la location');
+                }
+
+                // Recharger les films après une location réussie
+                loadMovies();
+            } catch (error) {
+                showError('Erreur lors de la location du film');
+            }
+        }
+
+        // Gestion des filtres
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                // Implémenter la logique de filtrage ici
+            });
+        });
+
+        // Gestion de la recherche
+        const searchInput = document.querySelector('.search-input');
+        let searchTimeout;
+        searchInput.addEventListener('input', () => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                // Implémenter la logique de recherche ici
+            }, 300);
+        });
+
+        // Affichage des erreurs
+        function showError(message) {
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+        }
+
+        // Chargement initial des films
+        loadMovies();
+    </script>
+</body>
+</html> 

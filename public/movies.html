@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movies - Movie Rental</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 60px auto 0;
+            padding: 20px;
+        }
+
+        .search-section {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+        }
+
+        .filter-box {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .select-input {
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            min-width: 200px;
+        }
+
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            width: 100%;
+        }
+
+        .movie-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .movie-image-container {
+            position: relative;
+            overflow: hidden;
+            height: 320px;
+        }
+
+        .movie-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .movie-card:hover .movie-image {
+            transform: scale(1.05);
+        }
+
+        .movie-info {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7));
+        }
+
+        .movie-title {
+            color: #fff;
+            margin-bottom: 16px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            position: relative;
+            padding-bottom: 12px;
+        }
+
+        .movie-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: #10b981;
+            transition: width 0.3s ease;
+        }
+
+        .movie-card:hover .movie-title::after {
+            width: 80px;
+        }
+
+        .genres-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .genre-badge {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-block;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .genre-badge:hover {
+            background: rgba(16, 185, 129, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .year-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-top: 12px;
+            opacity: 0.9;
+        }
+
+        .year-badge i {
+            color: #10b981;
+            font-size: 1rem;
+        }
+
+        .movie-description {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin: 12px 0;
+            flex-grow: 1;
+        }
+
+        .movie-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            flex: 1;
+            text-align: center;
+        }
+
+        .primary-button {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .primary-button:hover {
+            background: rgba(16, 185, 129, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .secondary-button {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .secondary-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Modal de bande-annonce */
+        .trailer-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .trailer-modal.active {
+            display: flex;
+        }
+
+        .trailer-content {
+            width: 90%;
+            max-width: 1000px;
+            position: relative;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .close-trailer {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .trailer-iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .navbar {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .navbar h2 {
+            color: #ff4500;
+            margin: 0;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+        .logout-btn {
+            background: #ff0000;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .main-content {
+            margin-top: 70px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            background: linear-gradient(45deg, #ff0000, #ff4500);
+        }
+
+        .rental-history {
+            display: none;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .rental-history.active {
+            display: block;
+        }
+
+        .rental-card {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .rental-image {
+            width: 150px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .rental-info {
+            flex: 1;
+        }
+
+        .rental-title {
+            color: #ff4500;
+            margin-bottom: 10px;
+        }
+
+        .rental-details {
+            color: #ccc;
+            margin-bottom: 10px;
+        }
+
+        .rental-status {
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            display: inline-block;
+        }
+
+        .status-active {
+            background: rgba(0, 255, 0, 0.2);
+            color: #00ff00;
+        }
+
+        .status-returned {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ccc;
+        }
+
+        .rating-section {
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .stars {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .star {
+            font-size: 24px;
+            color: #10b981;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .star:hover {
+            transform: scale(1.2);
+            color: #059669;
+        }
+
+        .star.active {
+            color: #059669;
+            transform: scale(1.1);
+        }
+
+        .average-rating {
+            margin-top: 10px;
+            text-align: center;
+            color: #10b981;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .rating-count {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .movie-card {
+                border-radius: 12px;
+            }
+
+            .movie-image-container {
+                height: 280px;
+            }
+
+            .movie-info {
+                padding: 20px;
+            }
+
+            .movie-title {
+                font-size: 1.2rem;
+            }
+
+            .genre-badge {
+                padding: 5px 10px;
+                font-size: 0.75rem;
+            }
+
+            .button {
+                padding: 8px 16px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body class="movies-bg">
+    <nav class="navbar">
+        <div class="nav-brand">Movie Rental</div>
+        <div class="nav-links">
+            <a href="movies.html" class="active">Movies</a>
+            <a href="my-movies.html">My Movies</a>
+            <a href="profile.html">Profile</a>
+            <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="search-section">
+            <input type="text" id="searchInput" placeholder="Search movies...">
+            <select id="genreFilter">
+                <option value="">All Genres</option>
+            </select>
+        </div>
+
+        <div class="movies-grid" id="moviesGrid">
+            <!-- Movies will be loaded here -->
+        </div>
+    </div>
+
+    <!-- Modal pour la bande-annonce -->
+    <div id="trailerModal" class="trailer-modal">
+        <div class="trailer-content">
+            <button id="closeTrailer" class="close-trailer">&times;</button>
+            <iframe id="trailerFrame" class="trailer-iframe" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <script>
+        // Check authentication
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = 'login.html';
+        });
+
+        // Load movies
+        async function loadMovies(search = '', genre = '') {
+            try {
+                const response = await fetch(`/api/movies?search=${search}&genre=${genre}`);
+                const movies = await response.json();
+                
+                const moviesGrid = document.getElementById('moviesGrid');
+                moviesGrid.innerHTML = '';
+
+                movies.forEach(movie => {
+                    const movieCard = document.createElement('div');
+                    movieCard.className = 'movie-card';
+                    movieCard.innerHTML = `
+                        <img src="${movie.imgPath}" alt="${movie.title}">
+                        <div class="movie-info">
+                            <h3>${movie.title}</h3>
+                            <p>${movie.genre}</p>
+                            <p>${movie.annee_sortie}</p>
+                            <button class="btn btn-primary" onclick="viewMovie(${movie.id})">View Details</button>
+                        </div>
+                    `;
+                    moviesGrid.appendChild(movieCard);
+                });
+            } catch (error) {
+                console.error('Error loading movies:', error);
+            }
+        }
+
+        // Load genres
+        async function loadGenres() {
+            try {
+                const response = await fetch('/api/movies');
+                const movies = await response.json();
+                
+                const genres = new Set();
+                movies.forEach(movie => {
+                    movie.genre.split(', ').forEach(genre => genres.add(genre));
+                });
+
+                const genreFilter = document.getElementById('genreFilter');
+                genres.forEach(genre => {
+                    const option = document.createElement('option');
+                    option.value = genre;
+                    option.textContent = genre;
+                    genreFilter.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading genres:', error);
+            }
+        }
+
+        // View movie details
+        function viewMovie(movieId) {
+            window.location.href = `movie-details.html?id=${movieId}`;
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const search = e.target.value;
+            const genre = document.getElementById('genreFilter').value;
+            loadMovies(search, genre);
+        });
+
+        document.getElementById('genreFilter').addEventListener('change', (e) => {
+            const genre = e.target.value;
+            const search = document.getElementById('searchInput').value;
+            loadMovies(search, genre);
+        });
+
+        // Initial load
+        loadMovies();
+        loadGenres();
+    </script>
+    <script src="js/movies.js"></script>
+    <script src="js/ratings.js"></script>
+</body>
+</html> 

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Movie Rental</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .profile-container {
+            max-width: 1200px;
+            margin: 80px auto 20px;
+            padding: 20px;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(45deg, #ff0000, #ff4500);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .profile-info h2 {
+            color: #ff4500;
+            margin-bottom: 10px;
+        }
+
+        .profile-info p {
+            color: #ccc;
+            margin: 5px 0;
+        }
+
+        .rentals-section {
+            margin-top: 30px;
+        }
+
+        .rentals-section h3 {
+            color: #ff4500;
+            margin-bottom: 20px;
+        }
+
+        .rentals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .rental-card {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .rental-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .rental-info {
+            padding: 15px;
+        }
+
+        .rental-title {
+            color: #ff4500;
+            margin-bottom: 10px;
+        }
+
+        .rental-details {
+            color: #ccc;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .rental-status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .status-active {
+            background: rgba(0, 255, 0, 0.2);
+            color: #00ff00;
+        }
+
+        .status-returned {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ccc;
+        }
+
+        .return-button {
+            background: linear-gradient(45deg, #ff0000, #ff4500);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .return-button:hover {
+            background: linear-gradient(45deg, #ff4500, #ff0000);
+            transform: translateY(-2px);
+        }
+
+        .return-button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+    </style>
+</head>
+<body class="profile-bg">
+    <nav class="navbar">
+        <div class="nav-brand">Movie Rental</div>
+        <div class="nav-links">
+            <a href="movies.html">Movies</a>
+            <a href="my-movies.html">My Movies</a>
+            <a href="profile.html" class="active">Profile</a>
+            <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="profile-section">
+            <h1>Profile</h1>
+            <div class="profile-avatar" style="margin: 0 auto 20px;">
+                <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Avatar" style="width:120px;height:120px;border-radius:50%;background:#fff;box-shadow:0 0 10px #0002;">
+            </div>
+            <div id="profileInfo">
+                <!-- Profile information will be loaded here -->
+            </div>
+            
+            <div class="profile-actions">
+                <button id="updateProfileBtn" class="btn btn-primary">Update Profile</button>
+                <button id="changePasswordBtn" class="btn btn-secondary">Change Password</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check authentication
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = 'login.html';
+        });
+
+        // Load profile information
+        async function loadProfile() {
+            try {
+                const response = await fetch('/api/users/profile', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const user = await response.json();
+                const profileInfo = document.getElementById('profileInfo');
+                profileInfo.innerHTML = `
+                    <div class="profile-field">
+                        <label>Name:</label>
+                        <input type="text" id="name" value="${user.name}" disabled>
+                    </div>
+                    <div class="profile-field">
+                        <label>Email:</label>
+                        <input type="email" id="email" value="${user.email}" disabled>
+                    </div>
+                    <div class="profile-field">
+                        <label>Member Since:</label>
+                        <input type="text" value="${new Date(user.date_inscription).toLocaleDateString()}" disabled>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Error loading profile:', error);
+            }
+        }
+
+        // Update profile
+        document.getElementById('updateProfileBtn').addEventListener('click', async () => {
+            const nameInput = document.getElementById('name');
+            const emailInput = document.getElementById('email');
+
+            if (nameInput.disabled) {
+                // Enable editing
+                nameInput.disabled = false;
+                emailInput.disabled = false;
+                this.textContent = 'Save Changes';
+            } else {
+                // Save changes
+                try {
+                    const response = await fetch('/api/users/profile', {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            name: nameInput.value,
+                            email: emailInput.value
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        alert('Profile updated successfully!');
+                        nameInput.disabled = true;
+                        emailInput.disabled = true;
+                        this.textContent = 'Update Profile';
+                    } else {
+                        alert(data.error || 'Failed to update profile');
+                    }
+                } catch (error) {
+                    console.error('Error updating profile:', error);
+                    alert('An error occurred while updating profile');
+                }
+            }
+        });
+
+        // Change password
+        document.getElementById('changePasswordBtn').addEventListener('click', () => {
+            const currentPassword = prompt('Enter current password:');
+            if (!currentPassword) return;
+
+            const newPassword = prompt('Enter new password:');
+            if (!newPassword) return;
+
+            const confirmPassword = prompt('Confirm new password:');
+            if (!confirmPassword) return;
+
+            if (newPassword !== confirmPassword) {
+                alert('Passwords do not match');
+                return;
+            }
+
+            changePassword(currentPassword, newPassword);
+        });
+
+        async function changePassword(currentPassword, newPassword) {
+            try {
+                const response = await fetch('/api/users/password', {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        currentPassword,
+                        newPassword
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert('Password changed successfully!');
+                } else {
+                    alert(data.error || 'Failed to change password');
+                }
+            } catch (error) {
+                console.error('Error changing password:', error);
+                alert('An error occurred while changing password');
+            }
+        }
+
+        // Initial load
+        loadProfile();
+    </script>
+</body>
+</html> 

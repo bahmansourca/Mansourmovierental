@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Movies - Movie Rental</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="my-movies-bg">
+    <nav class="navbar">
+        <div class="nav-brand">Movie Rental</div>
+        <div class="nav-links">
+            <a href="movies.html">Movies</a>
+            <a href="my-movies.html" class="active">My Movies</a>
+            <a href="profile.html">Profile</a>
+            <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>My Rented Movies</h1>
+        <div id="rentedMovies" class="movies-grid">
+            <!-- Rented movies will be loaded here -->
+        </div>
+    </div>
+
+    <script>
+        // Check authentication
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = 'login.html';
+        });
+
+        // Load rented movies
+        async function loadRentedMovies() {
+            try {
+                const response = await fetch('/api/rentals/my-rentals', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const rentals = await response.json();
+                const rentedMovies = document.getElementById('rentedMovies');
+                rentedMovies.innerHTML = '';
+
+                if (rentals.length === 0) {
+                    rentedMovies.innerHTML = '<p>You have no rented movies.</p>';
+                    return;
+                }
+
+                rentals.forEach(rental => {
+                    const movieCard = document.createElement('div');
+                    movieCard.className = 'movie-card';
+                    movieCard.innerHTML = `
+                        <img src="${rental.imgPath}" alt="${rental.title}">
+                        <div class="movie-info">
+                            <h3>${rental.title}</h3>
+                            <p>Rented on: ${new Date(rental.rental_date).toLocaleDateString()}</p>
+                            <button class="btn btn-primary" onclick="returnMovie(${rental.id})">Return Movie</button>
+                        </div>
+                    `;
+                    rentedMovies.appendChild(movieCard);
+                });
+            } catch (error) {
+                console.error('Error loading rented movies:', error);
+            }
+        }
+
+        // Return movie
+        async function returnMovie(rentalId) {
+            try {
+                const response = await fetch(`/api/rentals/return/${rentalId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert('Movie returned successfully!');
+                    loadRentedMovies(); // Reload the list
+                } else {
+                    alert(data.error || 'Failed to return movie');
+                }
+            } catch (error) {
+                console.error('Error returning movie:', error);
+                alert('An error occurred while returning the movie');
+            }
+        }
+
+        // Initial load
+        loadRentedMovies();
+    </script>
+</body>
+</html> 
