@@ -4,6 +4,8 @@ const path = require('path');
 
 async function initializeDatabase() {
     try {
+        // Forcer la suppression de la table ratings pour corriger la colonne film_id
+        await db.run('DROP TABLE IF EXISTS ratings');
         // Read and execute schema (chaque requête séparément)
         const schema = fs.readFileSync(path.join(__dirname, '../../schema.sql'), 'utf8');
         // Supprimer toutes les lignes de commentaires
