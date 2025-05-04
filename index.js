@@ -2,14 +2,15 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-const authRoutes = require('./src/routes/authRoutes');
-const movieRoutes = require('./src/routes/movieRoutes');
-const rentalRoutes = require('./src/routes/rentalRoutes');
-const userRoutes = require('./src/routes/userRoutes');
-const ratingRoutes = require('./src/routes/ratingRoutes');
+const authRoutes = require('./src/routes/authRoutesPg');
+const movieRoutes = require('./src/routes/movieRoutesPg');
+const rentalRoutes = require('./src/routes/rentalRoutesPg');
+const userRoutes = require('./src/routes/userRoutesPg');
+const ratingRoutes = require('./src/routes/ratingRoutesPg');
 
 // Initialisation de la base de données
-require('./src/db/init.js');
+// require('./src/db/init.js'); // SQLite (désactivé)
+// require('./src/db/initPg.js'); // PostgreSQL (à lancer manuellement si besoin)
 
 const app = express();
 const PORT = process.env.PORT || 3001;
