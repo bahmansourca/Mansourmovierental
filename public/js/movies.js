@@ -103,12 +103,13 @@ async function rentMovie(movieId) {
             return;
         }
 
-        const response = await fetch('/api/rentals/rent/' + movieId, {
+        const response = await fetch('/api/rentals/rent', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify({ filmId: movieId })
         });
 
         const data = await response.json();
