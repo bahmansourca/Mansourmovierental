@@ -1,5 +1,5 @@
 -- Table des users
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
@@ -8,7 +8,7 @@ CREATE TABLE users (
 );
 
 -- Table des films
-CREATE TABLE films (
+CREATE TABLE IF NOT EXISTS films (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title VARCHAR(255) NOT NULL,
     genre VARCHAR(255),
@@ -23,7 +23,7 @@ CREATE TABLE films (
 );
 
 -- Table des rentals
-CREATE TABLE rentals (
+CREATE TABLE IF NOT EXISTS rentals (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER,
     film_id INTEGER,
