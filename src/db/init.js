@@ -28,7 +28,7 @@ async function initializeDatabase() {
             const movies = [
                 {
                     title: "Schindler's List",
-                    genre: "Biography, Drama, History",
+                    genre: "Biography, Drama, History, War",
                     annee_sortie: 1993,
                     langue_originale: "English",
                     pays_productions: "USA",
@@ -52,7 +52,7 @@ async function initializeDatabase() {
                 },
                 {
                     title: "Léon",
-                    genre: "Action, Crime, Drama",
+                    genre: "Crime, Thriller",
                     annee_sortie: 1994,
                     langue_originale: "English",
                     pays_productions: "France",
@@ -64,7 +64,7 @@ async function initializeDatabase() {
                 },
                 {
                     title: "Pulp Fiction",
-                    genre: "Crime, Drama",
+                    genre: "Crime, Thriller",
                     annee_sortie: 1994,
                     langue_originale: "English",
                     pays_productions: "USA",
@@ -73,6 +73,66 @@ async function initializeDatabase() {
                     available_copies: 3,
                     imgPath: "https://m.media-amazon.com/images/M/MV5BNGNhMDIzZTUtNTBlZi00MTRlLWFjM2ItYzViMjE3YzI5MjljXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg",
                     trailer: "https://www.youtube.com/embed/s7EdQ4FqbhY"
+                },
+                {
+                    title: "True Lies",
+                    genre: "Action, Comedy, Romance, Thriller",
+                    annee_sortie: 1994,
+                    langue_originale: "English",
+                    pays_productions: "USA",
+                    acteurs: "Arnold Schwarzenegger, Jamie Lee Curtis, Tom Arnold",
+                    realisateurs: "James Cameron",
+                    available_copies: 2,
+                    imgPath: "https://m.media-amazon.com/images/M/MV5BMTQwOTQyNjYwNF5BMl5BanBnXkFtZTcwODg2NTYyMQ@@._V1_.jpg",
+                    trailer: "https://www.youtube.com/embed/3B8ocfB8jj4"
+                },
+                {
+                    title: "Teenage Mutant Ninja Turtles",
+                    genre: "Action, Adventure, Comedy, Crime, Drama, Family, Sci-Fi",
+                    annee_sortie: 1990,
+                    langue_originale: "English",
+                    pays_productions: "USA",
+                    acteurs: "Judith Hoag, Elias Koteas, Josh Pais",
+                    realisateurs: "Steve Barron",
+                    available_copies: 3,
+                    imgPath: "https://m.media-amazon.com/images/M/MV5BMTYwNjQyNjQwNF5BMl5BanBnXkFtZTcwODg2NTYyMQ@@._V1_.jpg",
+                    trailer: "https://www.youtube.com/embed/FMJPwGoAfAk"
+                },
+                {
+                    title: "Fast & Furious",
+                    genre: "Action, Crime, Drama, Thriller",
+                    annee_sortie: 2009,
+                    langue_originale: "English",
+                    pays_productions: "USA",
+                    acteurs: "Vin Diesel, Paul Walker, Michelle Rodriguez",
+                    realisateurs: "Justin Lin",
+                    available_copies: 4,
+                    imgPath: "https://m.media-amazon.com/images/M/MV5BMTYwNjQyNjQwNF5BMl5BanBnXkFtZTcwODg2NTYyMQ@@._V1_.jpg",
+                    trailer: "https://www.youtube.com/embed/2TAOizOnNPo"
+                },
+                {
+                    title: "Hook",
+                    genre: "Adventure, Family, Fantasy",
+                    annee_sortie: 1991,
+                    langue_originale: "English",
+                    pays_productions: "USA",
+                    acteurs: "Dustin Hoffman, Robin Williams, Julia Roberts",
+                    realisateurs: "Steven Spielberg",
+                    available_copies: 2,
+                    imgPath: "https://m.media-amazon.com/images/M/MV5BMTYwNjQyNjQwNF5BMl5BanBnXkFtZTcwODg2NTYyMQ@@._V1_.jpg",
+                    trailer: "https://www.youtube.com/embed/YoHD9XEInc0"
+                },
+                {
+                    title: "Sister Act",
+                    genre: "Comedy, Crime, Music",
+                    annee_sortie: 1992,
+                    langue_originale: "English",
+                    pays_productions: "USA",
+                    acteurs: "Whoopi Goldberg, Maggie Smith, Harvey Keitel",
+                    realisateurs: "Emile Ardolino",
+                    available_copies: 3,
+                    imgPath: "https://m.media-amazon.com/images/M/MV5BMTYwNjQyNjQwNF5BMl5BanBnXkFtZTcwODg2NTYyMQ@@._V1_.jpg",
+                    trailer: "https://www.youtube.com/embed/V6N6U7YVFyA"
                 }
             ];
 
