@@ -25,18 +25,6 @@ async function initializeDatabase() {
             // Insert sample movies
             const movies = [
                 {
-                    title: "Avatar",
-                    genre: "Action, Adventure, Fantasy",
-                    annee_sortie: 2009,
-                    langue_originale: "English",
-                    pays_productions: "USA",
-                    acteurs: "Sam Worthington, Zoe Saldana, Sigourney Weaver",
-                    realisateurs: "James Cameron",
-                    available_copies: 3,
-                    imgPath: "https://m.media-amazon.com/images/M/MV5BZDA0OGQxNTItMDZkMC00N2UyLTg3MzMtYTJmNjg3Nzk5MzRiXkEyXkFqcGdeQXVyMjUzOTY1NTc@._V1_.jpg",
-                    trailer: "https://www.youtube.com/embed/5e8T3dYdXq0"
-                },
-                {
                     title: "Schindler's List",
                     genre: "Biography, Drama, History",
                     annee_sortie: 1993,
