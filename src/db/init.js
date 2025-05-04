@@ -4,9 +4,12 @@ const path = require('path');
 
 async function initializeDatabase() {
     try {
-        // Read and execute schema
+        // Read and execute schema (chaque requête séparément)
         const schema = fs.readFileSync(path.join(__dirname, '../../schema.sql'), 'utf8');
-        await db.run(schema);
+        const statements = schema.split(';').map(s => s.trim()).filter(s => s.length);
+        for (const stmt of statements) {
+            await db.run(stmt);
+        }
 
         // Vérifier si la table films est vide
         const count = await db.get('SELECT COUNT(*) as count FROM films');
